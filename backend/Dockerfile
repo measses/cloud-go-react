@@ -1,5 +1,11 @@
 FROM golang:1.22-alpine AS builder
 
+ENV CGO_ENABLED=1
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+RUN apk add --no-cache gcc musl-dev
+
 WORKDIR /app
 
 COPY go.mod go.sum ./
@@ -12,8 +18,9 @@ FROM alpine:latest
 
 WORKDIR /root/
 COPY --from=builder /app/main .
-COPY --from=builder /app/.env .
 
-EXPOSE 8080
+EXPOSE 9090
 
-CMD ["./main"]
+# Uygulama başlat
+CMD ["./main", "--port", "9090"]
+
