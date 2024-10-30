@@ -17,7 +17,7 @@ function App() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/categories/", { withCredentials: true });
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/categories/`, { withCredentials: true });
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -26,12 +26,13 @@ function App() {
   
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/posts/", { withCredentials: true });
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/posts/`, { withCredentials: true });
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
   };
+  
   
   return (
     <div className="App p-5">
