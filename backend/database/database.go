@@ -1,8 +1,7 @@
 package database
 
 import (
-	"go-restful-api/models"
-	"log"
+	"os"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -10,13 +9,14 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDatabase() {
-	database, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Veritabanına bağlanılamadı:", err)
+func ConnectDatabase() (*gorm.DB, error) {
+	dbPath := os.Getenv("DATABASE_PATH")
+	if dbPath == "" {
+		dbPath = "data/database.db"
 	}
-
-	database.AutoMigrate(&models.Category{}, &models.Post{})
-
-	DB = database
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
